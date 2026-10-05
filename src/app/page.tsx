@@ -306,18 +306,6 @@ export default function Home() {
             </button>
           )}
         </div>
-
-          {rendered.length > 0 && (
-            <div className="grid grid-cols-3 gap-3">
-              {rendered.map((src, idx) => (
-                <button key={idx} onClick={() => setActivePreview(idx)} className={`rounded-xl overflow-hidden border-2 ${idx === activePreview ? "border-[#2563eb]" : "border-slate-200"} bg-white`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={src} alt={`thumb ${idx + 1}`} className="w-full aspect-[4/5] object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
       </main>
 
       <footer className="max-w-6xl mx-auto px-6 py-8 text-center text-xs text-slate-500">
