@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: threads-it-carousel
+    env: node
+    plan: free
+    buildCommand: npm ci && npm run build
+    startCommand: npm start
+    healthCheckPath: /
+    autoDeploy: false
+    envVars:
+      - key: NODE_VERSION
+        value: 20.19.0
