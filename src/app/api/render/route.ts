@@ -251,7 +251,33 @@ export async function POST(request: Request) {
       renderedImages.push(base64);
     }
 
-    return NextResponse.json({ success: true, slides: renderedImages });
+    // Optional: save to public/generated for external consumers like Threads API
+    const savePublic = Boolean(body?.savePublic);
+    const publicUrls: string[] = [];
+    if (savePublic) {
+      const generatedDir = path.join(process.cwd(), "public", "generated");
+      if (!fs.existsSync(generatedDir)) {
+        fs.mkdirSync(generatedDir, { recursive: true });
+      }
+
+      const host = request.headers.get("host") || "3.26.6.38";
+      const protocol = request.headers.get("x-forwarded-proto") || "http";
+      const batchId = `${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
+
+      for (let i = 0; i < renderedImages.length; i++) {
+        const rawBase64 = renderedImages[i].replace(/^data:image\/png;base64,/, "");
+        const filename = `slide_${batchId}_${i + 1}.png`;
+        const filePath = path.join(generatedDir, filename);
+        fs.writeFileSync(filePath, Buffer.from(rawBase64, "base64"));
+        publicUrls.push(`${protocol}://${host}/generated/${filename}`);
+      }
+    }
+
+    return NextResponse.json({
+      success: true,
+      slides: renderedImages,
+      ...(savePublic ? { publicUrls } : {}),
+    });
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : "Failed to render carousel";
     console.error("Rendering error:", error);
