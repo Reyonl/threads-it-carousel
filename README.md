@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# threads-it-carousel
+
+IT news → Instagram / Threads carousel generator — 1080×1350 PNG via satori + sharp.
+
+Dikurasi dari **Hacker News** & **Dev.to**. Pilih berita → generate carousel (cover + points + closing) → preview & ZIP download.
+
+## Stack
+
+- Next.js 16 (App Router) + React 19 + Tailwind CSS v4
+- satori + @resvg/resvg-js + sharp — render 1080×1350 PNG
+- rss-parser (Dev.to) + Hacker News Firebase API
+- jszip + file-saver — ZIP download
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `npm run dev` — dev server (Turbopack)
+- `npm run build` — production build
+- `npm run lint` — eslint
+- `npm start` — production server
 
-## Learn More
+## API
 
-To learn more about Next.js, take a look at the following resources:
+- `GET /api/news?limit=6&source=all|hacker-news|dev-to` → `{ success, count, data: ITNews[] }`
+- `POST /api/render` body `{ slides: RenderSlide[], theme }` → `{ success, slides: base64[] }`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Fonts
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+`public/fonts/Inter-Regular.ttf` (+ `Inter-Bold.woff` fallback) — used by satori at 400/700/800.
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Vercel forbidden — deploy target TBD.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built by [@reyonlau_](https://github.com/Reyonl)
