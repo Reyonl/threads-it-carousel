@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import type { ITNews } from "@/types";
-import { PublishThreadsModal, type RenderSlide as ModalRenderSlide } from "@/components/PublishThreadsModal";
+import { PublishThreadsModal, type RenderSlide as ModalRenderSlide } from "./components/PublishThreadsModal";
 
 interface RenderSlide {
   title: string;
