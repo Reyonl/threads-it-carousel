@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import type { ITNews } from "@/types";
+import { PublishThreadsModal, type RenderSlide as ModalRenderSlide } from "@/components/PublishThreadsModal";
 
 interface RenderSlide {
   title: string;
@@ -49,6 +50,7 @@ export default function Home() {
   const [source, setSource] = useState("all");
   const [limit, setLimit] = useState(6);
   const [activePreview, setActivePreview] = useState(0);
+  const [showPublishModal, setShowPublishModal] = useState(false);
 
   const fetchNews = useCallback(async () => {
     setLoadingNews(true);
@@ -293,6 +295,18 @@ export default function Home() {
             )}
           </div>
 
+          {/* Publish to Threads button */}
+          {rendered.length > 0 && (
+            <button
+              onClick={() => setShowPublishModal(true)}
+              disabled={selectedNews.length === 0}
+              className="w-full h-11 rounded-xl bg-gradient-to-r from-[#E1306C] to-[#2563eb] text-white text-sm font-bold hover:from-[#2563eb] hover:to-[#9333ea] disabled:opacity-50 disabled:cursor-not-allowed transition-all shadow-md hover:shadow-lg"
+            >
+              📌 Publish to Threads
+            </button>
+          )}
+        </div>
+
           {rendered.length > 0 && (
             <div className="grid grid-cols-3 gap-3">
               {rendered.map((src, idx) => (
@@ -306,7 +320,8 @@ export default function Home() {
         </div>
       </main>
 
-      <footer className="max-w-6xl mx-auto px-6 py-8 text-center text-xs text-slate-500">Built with Next.js + satori + resvg — 1080×1350 • by Reyon</footer>
+      <footer className="max-w-6xl mx-auto px-6 py-8 text-center text-xs text-slate-500">
+Built with Next.js + satori + resvg — 1080×1350 • by Reyon</footer>
     </div>
   );
 }
