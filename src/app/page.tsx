@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import JSZip from "jszip";
 import { saveAs } from "file-saver";
 import type { ITNews } from "@/types";
@@ -50,7 +50,7 @@ export default function Home() {
   const [limit, setLimit] = useState(6);
   const [activePreview, setActivePreview] = useState(0);
 
-  const fetchNews = async () => {
+  const fetchNews = useCallback(async () => {
     setLoadingNews(true);
     setError(null);
     try {
@@ -60,17 +60,17 @@ export default function Home() {
       setNews(json.data);
       setSelectedIds(new Set(json.data.map((n: ITNews) => n.id)));
       setRendered([]);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Gagal fetch");
     } finally {
       setLoadingNews(false);
     }
-  };
+  }, [limit, source]);
 
   useEffect(() => {
-    fetchNews();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    void fetchNews();
+  }, [fetchNews]);
 
   const toggleSelect = (id: string) => {
     setSelectedIds((prev) => {
@@ -101,8 +101,8 @@ export default function Home() {
       if (!json.success) throw new Error(json.error || "Gagal render");
       setRendered(json.slides);
       setActivePreview(0);
-    } catch (e: any) {
-      setError(e.message);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Gagal render");
     } finally {
       setLoadingRender(false);
     }

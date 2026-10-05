@@ -252,10 +252,11 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({ success: true, slides: renderedImages });
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : "Failed to render carousel";
     console.error("Rendering error:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "Failed to render carousel" },
+      { success: false, error: msg },
       { status: 500 }
     );
   }
